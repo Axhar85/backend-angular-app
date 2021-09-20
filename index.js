@@ -17,6 +17,11 @@ var connection = mysql.createConnection({
     database: 'mytestdb'
 })
 
+var fileUpload = require('express-fileupload');
+var fs = require('fs');
+app.use(fileUpload());
+app.use('/Photos', Express.static(__dirname+'/Photos'));
+
 app.listen(49146, () => {
     connection.connect(function(err){
         if(err) throw err;
@@ -144,5 +149,18 @@ app.put('/employee/:id',(req, res)=> {
             response.send('failed');
         }
         response.json('Deleted Successfully');
+    })
+});
+
+app.post('/employee/savefile', (request, response) =>{
+
+    fs.writeFile("./Photos/"+request.files.file.name,
+    request.files.file.data, function(err){
+        if(err){
+            return
+            console.log(err);
+        }
+
+        response.json(request.files.file.name);
     })
 })
