@@ -79,4 +79,70 @@ app.put('/Department/:id',(req, res)=> {
         }
         response.json('Deleted Successfully');
     })
+});
+
+
+
+app.get('/employee',(req, res)=> {
+    var query = `SELECT * FROM Employee`;
+    connection.query(query, function(err,rows,fields){
+        if(err){
+            response.send('failed');
+        }
+        response.send(rows);
+    })
+});
+app.post('/employee',(req, res)=> {
+    var query = `INSERT INTO Employee
+                 (EmployeeName,Deprtment,DataOfJoining,PhotoFileName)
+                  Value(?,?,?,?)`;
+    var values = [
+        request.body['EmployeeName'],
+        request.body['Deprtment'],
+        request.body['DataOfJoining'],
+        request.body['PhotoFileName']
+    ];
+    connection.query(query, values,  function(err,rows,fields){
+        if(err){
+            response.send('failed');
+        }
+        response.json('Added Successfully');
+    })
+});
+app.put('/employee',(req, res)=> {
+    var query = `UPDATE Employee
+                 SET EmployeeName=?,
+                 Deprtment=?,
+                 DateOfJoining=?,
+                 PhotoFileName=?,
+                 WHERE EmployeetId=?`;
+                
+    var values = [
+        request.body['EmployeeName'],
+        request.body['Deprtment'],
+        request.body['DateOfJoining'],
+        request.body['PhotoFileName'],
+        request.body['EmployeeId']
+
+    ];
+    connection.query(query, values,  function(err,rows,fields){
+        if(err){
+            response.send('failed');
+        }
+        response.json('Updated Successfully');
+    })
+});
+app.put('/employee/:id',(req, res)=> {
+    var query = `DELETE FROM Employee
+                 WHERE EmployeeId=?`;
+                
+    var values = [
+        parseInt(request.params.id)
+    ];
+    connection.query(query, values,  function(err,rows,fields){
+        if(err){
+            response.send('failed');
+        }
+        response.json('Deleted Successfully');
+    })
 })
